@@ -1,24 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use App\Models\Department;
 
-class DashboardDepartmentController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $departments = Department::all();
-
-        return view('dashboard-department', [
-            'title' => 'Dashboard Departments',
-            'dashboard_departments' => $departments->load('grades')
-        ]);
+        return view('dashboard', ['title' => 'Dashboard']);
     }
 
     /**

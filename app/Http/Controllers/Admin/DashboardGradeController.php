@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -15,7 +15,7 @@ class DashboardGradeController extends Controller
     {
         $grades = Grade::all();
 
-        return view('dashboard-grade', [
+        return view('Admin.dashboard-grade', [
             'title' => 'Dashboard Grade',
             'dashboard_grades' => $grades->load(['students', 'department'])
         ]);

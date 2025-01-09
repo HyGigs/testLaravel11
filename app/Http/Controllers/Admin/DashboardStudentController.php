@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,11 +11,21 @@ class DashboardStudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard-student', [
+        // Search functionality
+        $search = $request->get('search', '');
+
+        // Get students based on search query
+        $dashboard_students = Student::when($search, function($query, $search) {
+            return $query->where('nama', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+        })->get();
+
+        return view('Admin.dashboard-student', [
             'title' => 'Dashboard Students',
-            'dashboard_students' => Student::all(),
+            'dashboard_students' => $dashboard_students,
+            'search' => $search
         ]);
     }
 
@@ -62,8 +72,11 @@ class DashboardStudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $student = Student::findOrFail($id);
+        $student->delete();
+
+        return redirect()->route('dashboard-student.index')->with('success', 'Student deleted successfully.');
     }
 }
